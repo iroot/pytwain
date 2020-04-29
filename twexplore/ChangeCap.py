@@ -39,7 +39,7 @@ class wxDialog1(wx.Dialog):
 
         self.txtValue = wx.TextCtrl(id = wxID_WXDIALOG1TXTVALUE, name = 'txtValue', parent = self.panel1, pos = wx.Point(152, 32), size = wx.Size(100, 21), style = 0, value = '')
 
-        self.rbCapabilityType = wx.RadioBox(choices = ['TWTY_UINT32', 'TWTY_STR64', 'TWTY_UINT16', 'TWTY_BOOL', 'TWTY_INT32', 'TWTY_STR255', 'TWTY_STR128', 'TWTY_UINT8', 'TWTY_INT16', 'TWTY_INT8', 'TWTY_FIX32', 'TWTY_FRAME', 'TWTY_STR32'], id = wxID_WXDIALOG1RBCAPABILITYTYPE, label = 'Type of the Value', majorDimension = 3, name = 'rbCapabilityType', parent = self.panel1, point = wx.Point(40, 96), size = wx.Size(350, 128), style=wx.RA_SPECIFY_COLS, validator = wx.DefaultValidator)
+        self.rbCapabilityType = wx.RadioBox(choices = ['TWTY_UINT32', 'TWTY_STR64', 'TWTY_UINT16', 'TWTY_BOOL', 'TWTY_INT32', 'TWTY_STR255', 'TWTY_STR128', 'TWTY_UINT8', 'TWTY_INT16', 'TWTY_INT8', 'TWTY_FIX32', 'TWTY_FRAME', 'TWTY_STR32'], id = wxID_WXDIALOG1RBCAPABILITYTYPE, label = 'Type of the Value', majorDimension = 3, name = 'rbCapabilityType', parent = self.panel1, pos = wx.Point(40, 96), size = wx.Size(350, 128), style=wx.RA_SPECIFY_COLS, validator = wx.DefaultValidator)
 
         self.btnOneValUpdate = wx.Button(id = wxID_WXDIALOG1BTNONEVALUPDATE, label = 'Update Value', name = 'btnOneValUpdate', parent = self.panel1, pos = wx.Point(64, 272), size = wx.Size(75, 23), style = 0)
         self.btnOneValUpdate.Bind(wx.EVT_BUTTON, self.OnBtnonevalupdateButton, id=wxID_WXDIALOG1BTNONEVALUPDATE)

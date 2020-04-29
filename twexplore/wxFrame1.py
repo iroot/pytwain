@@ -45,9 +45,9 @@ class wxFrame1(wx.Frame):
     def _init_coll_statusBar1_Fields(self, parent):
         parent.SetFieldsCount(3)
 
-        parent.SetStatusText(number=0, text = 'sbMessage')
-        parent.SetStatusText(number=1, text = 'sbSource')
-        parent.SetStatusText(number=2, text = 'sbStatus')
+        parent.SetStatusText(i=0, text = 'sbMessage')
+        parent.SetStatusText(i=1, text = 'sbSource')
+        parent.SetStatusText(i=2, text = 'sbStatus')
 
         parent.SetStatusWidths([-1, 200, 200])
 
@@ -65,12 +65,12 @@ class wxFrame1(wx.Frame):
         self.SetClientSize(wx.Size(760, 510))
         self.SetMenuBar(self.menuBar1)
 
-        self.splitterWindow1 = wx.SplitterWindow(id = wxID_WXFRAME1SPLITTERWINDOW1, name = 'splitterWindow1', parent = self, point = wx.Point(128, -32), size = wx.Size(760, 491), style=wx.SP_3D)
+        self.splitterWindow1 = wx.SplitterWindow(id = wxID_WXFRAME1SPLITTERWINDOW1, name = 'splitterWindow1', parent = self, pos = wx.Point(128, -32), size = wx.Size(760, 491), style=wx.SP_3D)
 
         self.txtLog = wx.TextCtrl(id = wxID_WXFRAME1TXTLOG, name = 'txtLog', parent = self.splitterWindow1, pos = wx.Point(2, 387), size = wx.Size(756, 82), style=wx.TE_MULTILINE, value = '')
         #self.txtLog.SetTitle('')
         self.txtLog.SetLabel('')
-        self.txtLog.SetToolTipString('LogWindow')
+        self.txtLog.SetToolTip('LogWindow')
 
         self.listCaps = wx.ListCtrl(id = wxID_WXFRAME1LISTCAPS, name = 'listCaps', parent = self.splitterWindow1, pos = wx.Point(2, 2), size = wx.Size(756, 378), style=wx.LC_REPORT, validator = wx.DefaultValidator)
         self._init_coll_listCaps_Columns(self.listCaps)
@@ -115,8 +115,7 @@ class wxFrame1(wx.Frame):
         self.txtLog.AppendText("\n")
     def DisplayException(self, Title = None):
         ### Display the exception in a window
-        txt = string.join(traceback.format_exception(
-                sys.exc_type, sys.exc_value, sys.exc_traceback))
+        txt = ''.join(traceback.format_exception(*sys.exc_info()))
         dlg = wx.MessageDialog(self, txt,
                  Title, wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
@@ -198,15 +197,15 @@ class wxFrame1(wx.Frame):
         self.statusBar1.SetStatusText("Refreshing Capabilities", 0)
         if not hasattr(self, "CapabilityNames"):
             ## Get the list of names and store it
-            capnames = filter(lambda x:len(x) > 3 and x[0:3] == "CAP",
-                twain.__dict__.keys())
+            capnames = list(filter(lambda x:len(x) > 3 and x[0:3] == "CAP",
+                twain.__dict__.keys()))
             capnames.sort()
-            capnames1 = filter(lambda x:len(x) > 4 and x[0:4] == "ICAP",
-                twain.__dict__.keys())
+            capnames1 = list(filter(lambda x:len(x) > 4 and x[0:4] == "ICAP",
+                twain.__dict__.keys()))
             capnames1.sort()
             capnames = capnames + capnames1
-            capnames1 = filter(lambda x:len(x) > 4 and x[0:4] == "ACAP",
-                twain.__dict__.keys())
+            capnames1 = list(filter(lambda x:len(x) > 4 and x[0:4] == "ACAP",
+                twain.__dict__.keys()))
             capnames1.sort()
             self.CapabilityNames = capnames + capnames1
 
@@ -217,13 +216,13 @@ class wxFrame1(wx.Frame):
             for name in typenames:
                 self.typeIds[getattr(twain, name)] = name
 
-        if not hasattr(self, "LastSource") or self.LastSource <> self.SS.GetSourceName():
+        if not hasattr(self, "LastSource") or self.LastSource != self.SS.GetSourceName():
             self.LastSource = self.SS.GetSourceName()
             self.listCaps.ClearAll()
             self._init_coll_listCaps_Columns(self.listCaps)
             listIndex = 0
             for capname in self.CapabilityNames:
-                self.listCaps.InsertStringItem(listIndex, capname)
+                self.listCaps.InsertItem(listIndex, capname)
                 listIndex = listIndex + 1
 
             ### Colour code the list, depending on whether the capability
@@ -259,9 +258,10 @@ class wxFrame1(wx.Frame):
                 except:
                     curval = str(curval)
             except:
-                capval = str(sys.exc_type) + str(sys.exc_value)
-            self.listCaps.SetStringItem(i, 1, capval)
-            self.listCaps.SetStringItem(i, 2, curval)
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                capval = str(exc_type) + str(exc_value)
+            self.listCaps.SetItem(i, 1, capval)
+            self.listCaps.SetItem(i, 2, curval)
         self.statusBar1.SetStatusText("Refreshed Capabilities", 0)
 
     def OnFilemenuitems4Menu(self, event):
@@ -271,7 +271,7 @@ class wxFrame1(wx.Frame):
         return self.typeIds[TypeId]
 
     def OnListcapsListItemSelected(self, event):
-        self.currentItem = event.m_itemIndex
+        self.currentItem = event.GetIndex()
 
     def OnListcapsLeftDclick(self, event):
         if not hasattr(self, "SS"): return
@@ -313,10 +313,10 @@ class wxFrame1(wx.Frame):
         self.Constants = {}
         keys = twain.__dict__.keys()
         for k in keys:
-            if k[0] != '_' and string.find(k, '_') != -1:
-                prefix = string.split(k, '_', 1)[0]
+            if k[0] != '_' and k.find('_') != -1:
+                prefix = k.split('_', 1)[0]
                 value = getattr(twain, k)
-                if not self.Constants.has_key(prefix):
+                if prefix not in self.Constants:
                     self.Constants[prefix] = {}
                 self.Constants[prefix][value] = k
     def GetConstants(self, prefix):

@@ -42,11 +42,11 @@ class MainFrame(wx.Frame, TwainBase):
         menuBar.Append(menu, "&File")
         self.SetMenuBar(menuBar)
 
-        wx.EVT_MENU(self, ID_EXIT, self.MnuQuit)
-        wx.EVT_MENU(self, ID_OPEN_SCANNER, self.MnuOpenScanner)
-        wx.EVT_MENU(self, ID_ACQUIRE_NATIVELY, self.MnuAcquireNatively)
-        wx.EVT_MENU(self, ID_ACQUIRE_BY_FILE, self.MnuAcquireByFile)
-        wx.EVT_CLOSE(self, self.OnClose)
+        self.Bind(wx.EVT_MENU, self.MnuQuit, id=ID_EXIT)
+        self.Bind(wx.EVT_MENU, self.MnuOpenScanner, id=ID_OPEN_SCANNER)
+        self.Bind(wx.EVT_MENU, self.MnuAcquireNatively, id=ID_ACQUIRE_NATIVELY)
+        self.Bind(wx.EVT_MENU, self.MnuAcquireByFile, id=ID_ACQUIRE_BY_FILE)
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
 
         self.scrolledWindow1 = wx.ScrolledWindow(id = ID_SCROLLEDWINDOW1, name = 'scrolledWindow1', parent = self, pos = wx.Point(0, 0), style = wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
         self.bmpImage = wx.StaticBitmap(bitmap = wx.NullBitmap, id = ID_BMPIMAGE, name = 'bmpImage', parent = self.scrolledWindow1, pos = wx.Point(0, 0), style = 0)
